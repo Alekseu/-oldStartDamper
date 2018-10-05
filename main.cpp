@@ -6,45 +6,153 @@
  */
 #include <avr/io.h>
 #include <util/delay.h>
+
 //#include <avr/interrupt.h>
 
 //#include"EngineLogics/Benzo.h"
+#include "Driver/Stepper.h"
+#include "Driver/Adc.h"
 //Benzo _benz;
+Stepper _step;
+
+//общее колличество шаов 180градусов
+int counter=0;
+bool continue_=true;
+
+bool SearchStart()
+{
+	continue_=true;
+	counter=0;
+	//поиск стартового положения
+		while(continue_)
+		{
+			if((PINC &(1<<0))==0 )
+			{
+				PORTC&=~(1<<2);
+				continue_ = false;
+			}
+			else
+			{
+				PORTC|=(1<<2);
+			}
+
+			if(!continue_) break;
+
+			if(counter++>=310)
+			{
+				break;
+			}
+			_step.MultiStep(5,false);
+		}
+
+		if(counter>=310) return false;
+		return true;
+}
+
+bool SearchEnd()
+{
+	counter=0;
+	continue_ = true;
+	PORTC|=(1<<2);
+
+	//поиск стопового положения
+	while(continue_)
+	{
+
+		if((PINC &(1<<1))==0 )
+		{
+			PORTC&=~(1<<2);
+			continue_ =false;
+		}
+		else
+		{
+			PORTC|=(1<<2);
+		}
+
+		if(!continue_) break;
+
+		if(counter++>=310)
+		{
+			break;
+		}
+		_step.MultiStep(5,true);
+	}
+
+	if(counter++>=310) return false;
+
+	counter = counter*5;
+	return true;
+}
 
 int main(void)
 {
 
 	//_benz.init();
-	DDRC =0xFF;
+	DDRC=0xFF;
 	PORTC=0x00;
+	DDRC &= ~(1 << 0);
+	DDRC &= ~(1 << 1);
+	DDRC &= ~(1 << 5);
+	PORTC |= (1 << 0);
+	PORTC |= (1 << 1);
+	PORTC &=~(1 << 5);
 
-	int _impulse = 2;
-	int _out_impulse = 1;
+	PORTC|=(1<<2);
 
+
+	DDRD =0xFF;
+	PORTD=0x00;
+	_step.init();
+	adc_init();
+
+	int current_stap =0;
+	int adc=0;
+	int _proAdc=0;
+
+	if(!SearchStart()) {while(true);}
+
+	if(!SearchEnd()){ SearchStart(); while(true);}
+
+	//возврат на старт
+	_step.MultiStep(counter,false);
 
 	for(;;)
 	{
 		//_benz.processing();
-		PORTC |=(1<<5);
-		_delay_ms(_impulse);
-		PORTC &=~(1<<5);
-		_delay_ms(_out_impulse);
+		if((PINC &(1<<0))==0 || (PINC &(1<<1))==0 )
+		{
+			PORTC&=~(1<<2);
+		}
+		else
+		{
+			PORTC|=(1<<2);
+		}
 
-		PORTC |=(1<<4);
-		_delay_ms(_impulse);
-		PORTC &=~(1<<4);
-		_delay_ms(_out_impulse);
+		_proAdc = adc_read(5);
 
-		PORTC |=(1<<3);
-		_delay_ms(_impulse);
-		PORTC &=~(1<<3);
-		_delay_ms(_out_impulse);
+		adc = (_proAdc*1.22);
 
-		PORTC |=(1<<2);
-		_delay_ms(_impulse);
-		PORTC &=~(1<<2);
-		_delay_ms(_out_impulse);
+		if(current_stap<adc  && (adc-current_stap)>10 && (PINC &(1<<1))!=0 )
+		{
+			//_step.MultiStep((adc-current_stap),true);
+			_step.MultiStep(5,true);
+			current_stap+=5;// = adc;
+		}
+		else if(current_stap>adc && (current_stap-adc)>10 && (PINC &(1<<0))!=0 )
+		{
+			//_step.MultiStep((current_stap-adc),false);
+			_step.MultiStep(5,false);
+			current_stap-=5;// = adc;
+		}
+		else
+		{
 
+		}
+
+
+
+
+		//_delay_ms(10);
 
 	}
 

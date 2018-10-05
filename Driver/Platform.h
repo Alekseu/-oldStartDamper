@@ -55,4 +55,14 @@
 #define DROSSEL_LAVEL_CH 1
 
 
+//настройки шагового двигателя управления заслонкой холодного пуска
+#define IMPULSE_TIME 1200
+#define STEP_MOTOR_PORT PORTD
+#define STEP_MOTOR_DDR DDRD
+#define A_STEP_MOTOR (1<<0)
+#define B_STEP_MOTOR (1<<1)
+#define C_STEP_MOTOR (1<<2)
+#define D_STEP_MOTOR (1<<3)
+
+
 #endif /* DRIVER_PLATFORM_H_ */
