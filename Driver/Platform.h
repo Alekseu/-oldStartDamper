@@ -56,7 +56,7 @@
 
 
 //настройки шагового двигателя управления заслонкой холодного пуска
-#define IMPULSE_TIME 1200
+#define IMPULSE_TIME 900
 #define STEP_MOTOR_PORT PORTD
 #define STEP_MOTOR_DDR DDRD
 #define A_STEP_MOTOR (1<<0)

@@ -27,9 +27,6 @@ public:
 		STEP_MOTOR_PORT&=~A_STEP_MOTOR|B_STEP_MOTOR|C_STEP_MOTOR|D_STEP_MOTOR;
 	}
 
-
-
-
 	void OneStep(bool rotation)
 	{
 		switch(_currentStep)

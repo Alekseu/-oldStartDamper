@@ -39,14 +39,14 @@ bool SearchStart()
 
 			if(!continue_) break;
 
-			if(counter++>=310)
+			if(counter++>=700)
 			{
 				break;
 			}
-			_step.MultiStep(5,false);
+			_step.MultiStep(2,false);
 		}
 
-		if(counter>=310) return false;
+		if(counter>=700) return false;
 		return true;
 }
 
@@ -72,16 +72,16 @@ bool SearchEnd()
 
 		if(!continue_) break;
 
-		if(counter++>=310)
+		if(counter++>=700)
 		{
 			break;
 		}
-		_step.MultiStep(5,true);
+		_step.MultiStep(2,true);
 	}
 
-	if(counter++>=310) return false;
+	if(counter++>=700) return false;
 
-	counter = counter*5;
+	counter = counter*2;
 	return true;
 }
 
@@ -135,13 +135,13 @@ int main(void)
 
 		if(current_stap<adc  && (adc-current_stap)>10 && (PINC &(1<<1))!=0 )
 		{
-			_step.MultiStep(5,true);
-			current_stap+=5;
+			_step.MultiStep(2,true);
+			current_stap+=2;
 		}
 		else if(current_stap>adc && (current_stap-adc)>10 && (PINC &(1<<0))!=0 )
 		{
-			_step.MultiStep(5,false);
-			current_stap-=5;
+			_step.MultiStep(2,false);
+			current_stap-=2;
 		}
 
 
