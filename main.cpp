@@ -13,9 +13,12 @@
 //#include"EngineLogics/Benzo.h"
 #include "Driver/Stepper.h"
 #include "Driver/Adc.h"
+#include "EngineLogics/AKPP.h"
+
+
 //Benzo _benz;
 Stepper _step;
-
+AKPP _akpp;
 //общее колличество шаов 180градусов
 int counter=0;
 bool continue_=true;
@@ -87,7 +90,7 @@ bool SearchEnd()
 
 int main(void)
 {
-
+	_akpp.init();
 	//_benz.init();
 	DDRC=0xFF;
 	PORTC=0x00;
@@ -119,6 +122,7 @@ int main(void)
 
 	for(;;)
 	{
+		_akpp.Processing();
 		//_benz.processing();
 		if((PINC &(1<<0))==0 || (PINC &(1<<1))==0 )
 		{
