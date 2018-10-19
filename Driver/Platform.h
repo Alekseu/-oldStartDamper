@@ -10,6 +10,10 @@
 
 #include<avr/io.h>
 
+#define LED_DDR DDRB
+#define LED_PORT PORTB
+#define LED (1<<7)
+
 //обороты двигателя
 #define ENGINE_SPEED_PORT PORTD
 #define ENGINE_SPEED_DDR DDRD

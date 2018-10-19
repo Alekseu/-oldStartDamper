@@ -7,7 +7,7 @@
 
 #ifndef DRIVER_STEPPER_H_
 #define DRIVER_STEPPER_H_
-#include"util/delay.h"
+#include "../Driver/delay.h"
 #include "Platform.h"
 
 
@@ -33,7 +33,7 @@ public:
 		{
 		case 1:
 			STEP_MOTOR_PORT |=A_STEP_MOTOR;
-			_delay_us(_impulse);
+			delay_us(_impulse);
 			STEP_MOTOR_PORT &=~A_STEP_MOTOR;
 			STEP_MOTOR_PORT &=~B_STEP_MOTOR;
 			STEP_MOTOR_PORT &=~C_STEP_MOTOR;
@@ -41,7 +41,7 @@ public:
 			break;
 		case 2:
 			STEP_MOTOR_PORT |=B_STEP_MOTOR;
-			_delay_us(_impulse);
+			delay_us(_impulse);
 			STEP_MOTOR_PORT &=~A_STEP_MOTOR;
 			STEP_MOTOR_PORT &=~B_STEP_MOTOR;
 			STEP_MOTOR_PORT &=~C_STEP_MOTOR;
@@ -49,7 +49,7 @@ public:
 			break;
 		case 3:
 			STEP_MOTOR_PORT |=C_STEP_MOTOR;
-			_delay_us(_impulse);
+			delay_us(_impulse);
 			STEP_MOTOR_PORT &=~A_STEP_MOTOR;
 			STEP_MOTOR_PORT &=~B_STEP_MOTOR;
 			STEP_MOTOR_PORT &=~C_STEP_MOTOR;
@@ -57,7 +57,7 @@ public:
 			break;
 		case 4:
 			STEP_MOTOR_PORT |=D_STEP_MOTOR;
-			_delay_us(_impulse);
+			delay_us(_impulse);
 			STEP_MOTOR_PORT &=~A_STEP_MOTOR;
 			STEP_MOTOR_PORT &=~B_STEP_MOTOR;
 			STEP_MOTOR_PORT &=~C_STEP_MOTOR;
